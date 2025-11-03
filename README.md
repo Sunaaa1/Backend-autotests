@@ -51,4 +51,4 @@ allure serve allure-results
 
 ---
 
-🧑‍💻 **Автор:** [Sunnatilla Shukhratov](https://github.com/Sunaaa1)
+🧑‍💻 **Автор:** [Sunnat Shukhratov](https://github.com/Sunaaa1)
