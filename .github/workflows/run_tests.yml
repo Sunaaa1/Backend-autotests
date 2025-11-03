@@ -1,7 +1,7 @@
 name: Run backend autotests
 
 on:
-  workflow_dispatch:  # запуск вручную из вкладки Actions
+  workflow_dispatch:
 
 jobs:
   tests:
@@ -23,21 +23,17 @@ jobs:
           pip install allure-pytest
 
       - name: Run tests with Allure
-        run: pytest
+        run: pytest --alluredir=allure-results
 
-      - name: Generate Allure HTML report
-        run: |
-          mkdir -p allure-report
-          allure generate allure-results -o allure-report --clean
+      - name: Generate and upload Allure report
+        uses: allure-framework/allure@v2
+        with:
+          results: allure-results
+          output: allure-report
+        continue-on-error: false
 
-      - name: Zip Allure report for download
-        run: |
-          cd allure-report
-          zip -r ../allure-report.zip ./*
-          cd ..
-
-      - name: Upload zipped Allure report as artifact
+      - name: Upload Allure report as artifact
         uses: actions/upload-artifact@v4
         with:
           name: Allure HTML Report
-          path: allure-report.zip
+          path: allure-report
