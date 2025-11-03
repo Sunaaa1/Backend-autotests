@@ -1,0 +1,43 @@
+name: Run backend autotests
+
+on:
+  workflow_dispatch:  # запуск вручную из вкладки Actions
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install allure-pytest
+
+      - name: Run tests with Allure
+        run: pytest
+
+      - name: Generate Allure HTML report
+        run: |
+          mkdir -p allure-report
+          allure generate allure-results -o allure-report --clean
+
+      - name: Zip Allure report for download
+        run: |
+          cd allure-report
+          zip -r ../allure-report.zip ./*
+          cd ..
+
+      - name: Upload zipped Allure report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Allure HTML Report
+          path: allure-report.zip
