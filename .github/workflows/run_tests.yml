@@ -1,13 +1,13 @@
 name: Run backend autotests
 
 on:
-workflow_dispatch:
+ workflow_dispatch:
 
 jobs:
-tests:
-runs-on: ubuntu-latest
+ tests:
+  runs-on: ubuntu-latest
 
-steps:
+  steps:
   - name: Checkout repository
     uses: actions/checkout@v4
 
