@@ -1,6 +1,9 @@
 import allure
 import requests
+from jsonschema import validate
+
 from endpoints.base_endpoint import Endpoint
+from schemas.update_object_schema import update_object_schema
 
 base_url = 'https://api.restful-api.dev/objects'
 
@@ -15,5 +18,9 @@ class UpdateObject(Endpoint):
     @allure.step("Проверяем обновление данных объекта")
     def check_updated_payload(self):
         assert self.response_json["name"] == "new name"
+
+    @allure.step("Валидируем JSON-ответ по схеме update_object_schema")
+    def validate_response_schema(self):
+        validate(instance=self.response_json, schema=update_object_schema)
 
 

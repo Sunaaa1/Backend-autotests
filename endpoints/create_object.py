@@ -1,5 +1,7 @@
 import allure
 import requests
+from jsonschema import validate
+from schemas.create_object_schema import create_object_schema
 from endpoints.base_endpoint import Endpoint
 
 base_url = 'https://api.restful-api.dev/objects'
@@ -13,3 +15,7 @@ class CreateObject(Endpoint):
     @allure.step("Проверяем, что имя объекта совпадает с payload")
     def check_name(self, name):
         assert self.response_json["name"] == name
+
+    @allure.step("Валидируем JSON-ответ по схеме create_object_schema")
+    def validate_response_schema(self):
+        validate(instance=self.response_json, schema=create_object_schema)
